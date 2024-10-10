@@ -1,5 +1,6 @@
 package seedu.address.model.appointment.exceptions;
 
+import seedu.address.model.appointment.Appointment;
 import seedu.address.model.person.Person;
 
 /**
@@ -7,7 +8,7 @@ import seedu.address.model.person.Person;
  * (Appointments are considered duplicates if they have the same identity).
  */
 public class DuplicateAppointmentException extends RuntimeException {
-    public DuplicateAppointmentException(Person person) {
-        super(String.format("Existing appointment for %s encountered", person.getName().toString()));
+    public DuplicateAppointmentException(Appointment appointment) {
+        super(String.format("Existing appointment for %s encountered", appointment.getClient().getName()));
     }
 }
