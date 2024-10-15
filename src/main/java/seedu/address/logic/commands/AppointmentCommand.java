@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_FROM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TO;
@@ -33,10 +34,8 @@ public class AppointmentCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 "
             + "date/ 20/12/2024 fr/ 0800 to/ 1000";
 
-    public static final String MESSAGE_SUCCESS = "New appointment added: %1$s";
-    public static final String MESSAGE_ARGUMENTS = "Index: %1$d, Date: %2$s, From: %3$s, To: %4$s";
-    public static final String MESSAGE_ADD_APPOINTMENT_SUCCESS = "Added remark to Person: %1$s";
-    public static final String MESSAGE_UPDATE_APPOINTMENT_SUCCESS = "Removed remark from Person: %1$s";
+    public static final String MESSAGE_ADD_APPOINTMENT_SUCCESS = "New appointment added: %1$s";
+    public static final String MESSAGE_UPDATE_APPOINTMENT_SUCCESS = "Updated appointment from Person: %1$s";
 
     private final Index index;
     private final Appointment appointment;
@@ -48,6 +47,8 @@ public class AppointmentCommand extends Command {
      * @param appointment The new appointment to be added or updated.
      */
     public AppointmentCommand(Index index, Appointment appointment) {
+        requireNonNull(index);
+        requireNonNull(appointment);
         this.index = index;
         this.appointment = appointment;
     }
@@ -66,7 +67,7 @@ public class AppointmentCommand extends Command {
         }
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = new Person(personToEdit.getName(), personToEdit.getPhone(),
-                 personToEdit.getEmail(), appointment, personToEdit.getProperty());
+                 personToEdit.getEmail(), personToEdit.getTags(), appointment, personToEdit.getProperty());
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(generateSuccessMessage(editedPerson));
