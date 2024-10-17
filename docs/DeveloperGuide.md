@@ -106,7 +106,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete n/Alice`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
@@ -146,17 +146,17 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete n/Alice")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+![Interactions Inside the Logic Component for the `delete n/Alice` Command](images/DeleteSequenceDiagram.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteClientProfileCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteClientProfileCommandParser`) and uses it to parse the command.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteClientProfileCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
@@ -166,8 +166,8 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 <img src="images/ParserClasses.png" width="600"/>
 
 How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddClientProfileCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddClientProfileCommand`) which the `AddressBookParser` returns back as a `Command` object.
+* All `XYZCommandParser` classes (e.g., `AddClientProfileCommandParser`, `DeleteClientProfileCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -208,9 +208,59 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## Features and Implementation
 
 ### Client Management
-Sub features
+#### Add Client Profile
+The `add` command adds a new `Client` to the `UniquePersonList` in EZStates.
+
+The activity diagram of adding a `Client` is as shown below
+
+The sequence diagram below shows how the different components of EZStates interact when adding a `Client`
+
+**Details**
+
+
+#### Remove Client Profile
+The `delete` command deletes a `Client` from the `UniquePersonList` in EZstates.
+
+The activity diagram of deleting a `Client` is as shown below
+
+The sequence diagram below shows how the different components of EZStates interact when deleting a `Client`
+
+**Details**
+
+
+#### Update Client Profile
+The `edit` command edits an existing `Client` in the `UniquePersonList` in EZStates.
+
+The activity diagram of editing a `Client` is as shown below
+
+The sequence diagram below shows how the different components of EZStates interact when editing a `Client`
+
+**Details**
+
+
+#### Clear all Client Profiles
+The `clear` command clears all existing `Client` in the `UniquePersonList` in EZStates.
+
+The activity diagram of clearing the `UniquePersonList` is as shown below
+
+The sequence diagram below shows how the different components of EZStates interact when clearing the `UniquePersonList`
+
+**Details**
+
+
+#### List Client Profiles
+
+**Details**
+
+
+#### Find Client Profile
+
+**Details**
+
+
 ### Appointment Management
 Sub features
+
 ### Utility
 Sub features
 
